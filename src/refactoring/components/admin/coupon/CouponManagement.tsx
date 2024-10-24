@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Coupon } from "../../../../types";
+import { useCouponManagement } from "../../../hooks/useCouponManagement";
 
 interface CouponManagementProps {
   coupons: Coupon[];
@@ -10,22 +11,10 @@ export const CouponManagement: React.FC<CouponManagementProps> = ({
   coupons,
   onCouponAdd,
 }) => {
-  const [newCoupon, setNewCoupon] = useState<Coupon>({
-    name: "",
-    code: "",
-    discountType: "amount",
-    discountValue: 0,
-  });
-
-  const handleAddCoupon = () => {
-    onCouponAdd(newCoupon);
-    setNewCoupon({
-      name: "",
-      code: "",
-      discountType: "amount",
-      discountValue: 0,
-    });
-  };
+  const { newCoupon, setNewCoupon, handleAddCoupon } = useCouponManagement(
+    coupons,
+    onCouponAdd
+  );
 
   return (
     <div>
