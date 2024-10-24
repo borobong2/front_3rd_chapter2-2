@@ -12,6 +12,7 @@ import { CartPage } from "../../refactoring/pages/CartPage";
 import { AdminPage } from "../../refactoring/pages/AdminPage";
 import { Coupon, Product } from "../../types";
 import { useCart } from "../../refactoring/hooks/useCart";
+import { useCoupons } from "../../refactoring/hooks/useCoupon";
 
 const mockProducts: Product[] = [
   {
@@ -388,6 +389,37 @@ describe("advanced > ", () => {
         result.current.cart[0]
       );
       expect(appliedDiscount).toBe(0.2);
+    });
+  });
+  describe("useCoupons hook", () => {
+    test("초기 쿠폰을 설정하고 새 쿠폰을 추가할 수 있다", () => {
+      const initialCoupons: Coupon[] = [
+        {
+          name: "초기 쿠폰",
+          code: "INITIAL",
+          discountType: "percentage",
+          discountValue: 10,
+        },
+      ];
+
+      const { result } = renderHook(() => useCoupons(initialCoupons));
+
+      expect(result.current.coupons).toHaveLength(1);
+      expect(result.current.coupons[0].name).toBe("초기 쿠폰");
+
+      act(() => {
+        result.current.addCoupon({
+          name: "새 쿠폰",
+          code: "NEW",
+          discountType: "amount",
+          discountValue: 5000,
+        });
+      });
+
+      expect(result.current.coupons).toHaveLength(2);
+      expect(result.current.coupons[1].name).toBe("새 쿠폰");
+      expect(result.current.coupons[1].discountType).toBe("amount");
+      expect(result.current.coupons[1].discountValue).toBe(5000);
     });
   });
 });
