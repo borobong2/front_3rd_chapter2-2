@@ -1,5 +1,6 @@
 import React from "react";
 import { Coupon } from "../../../types";
+import { CouponOption } from "./CouponOption";
 
 interface CouponSelectorProps {
   coupons: Coupon[];
@@ -21,12 +22,7 @@ export const CouponSelector: React.FC<CouponSelectorProps> = ({
       >
         <option value="">쿠폰 선택</option>
         {coupons.map((coupon, index) => (
-          <option key={coupon.code} value={index}>
-            {coupon.name} -{" "}
-            {coupon.discountType === "amount"
-              ? `${coupon.discountValue}원`
-              : `${coupon.discountValue}%`}
-          </option>
+          <CouponOption coupon={coupon} index={index} />
         ))}
       </select>
       {selectedCoupon && (
