@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Product } from "../../../types";
+import { useProductEdit } from "../../hooks/useProductEdit";
 
 interface ProductItemProps {
   product: Product;
@@ -16,56 +17,18 @@ export const ProductItem: React.FC<ProductItemProps> = ({
   onToggle,
   onUpdate,
 }) => {
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [newDiscount, setNewDiscount] = useState({ quantity: 0, rate: 0 });
-
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct(product);
-  };
-
-  const handleEditComplete = () => {
-    if (editingProduct) {
-      onUpdate(editingProduct);
-      setEditingProduct(null);
-    }
-  };
-
-  const handleProductNameUpdate = (productId: string, newName: string) => {
-    if (editingProduct && editingProduct.id === productId) {
-      setEditingProduct({ ...editingProduct, name: newName });
-    }
-  };
-
-  const handlePriceUpdate = (productId: string, newPrice: number) => {
-    if (editingProduct && editingProduct.id === productId) {
-      setEditingProduct({ ...editingProduct, price: newPrice });
-    }
-  };
-
-  const handleStockUpdate = (productId: string, newStock: number) => {
-    if (editingProduct && editingProduct.id === productId) {
-      setEditingProduct({ ...editingProduct, stock: newStock });
-    }
-  };
-
-  const handleAddDiscount = (productId: string) => {
-    if (editingProduct && editingProduct.id === productId) {
-      setEditingProduct({
-        ...editingProduct,
-        discounts: [...editingProduct.discounts, newDiscount],
-      });
-      setNewDiscount({ quantity: 0, rate: 0 });
-    }
-  };
-
-  const handleRemoveDiscount = (productId: string, index: number) => {
-    if (editingProduct && editingProduct.id === productId) {
-      const newDiscounts = editingProduct.discounts.filter(
-        (_, i) => i !== index
-      );
-      setEditingProduct({ ...editingProduct, discounts: newDiscounts });
-    }
-  };
+  const {
+    editingProduct,
+    newDiscount,
+    setNewDiscount,
+    handleEditProduct,
+    handleEditComplete,
+    handleProductNameUpdate,
+    handlePriceUpdate,
+    handleStockUpdate,
+    handleAddDiscount,
+    handleRemoveDiscount,
+  } = useProductEdit(product, onUpdate);
 
   return (
     <div
@@ -81,16 +44,14 @@ export const ProductItem: React.FC<ProductItemProps> = ({
       </button>
       {isOpen && (
         <div className="mt-2">
-          {editingProduct && editingProduct.id === product.id ? (
+          {editingProduct ? (
             <div>
               <div className="mb-4">
                 <label className="block mb-1">상품명: </label>
                 <input
                   type="text"
                   value={editingProduct.name}
-                  onChange={(e) =>
-                    handleProductNameUpdate(product.id, e.target.value)
-                  }
+                  onChange={(e) => handleProductNameUpdate(e.target.value)}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -99,9 +60,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
                 <input
                   type="number"
                   value={editingProduct.price}
-                  onChange={(e) =>
-                    handlePriceUpdate(product.id, parseInt(e.target.value))
-                  }
+                  onChange={(e) => handlePriceUpdate(parseInt(e.target.value))}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -110,9 +69,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
                 <input
                   type="number"
                   value={editingProduct.stock}
-                  onChange={(e) =>
-                    handleStockUpdate(product.id, parseInt(e.target.value))
-                  }
+                  onChange={(e) => handleStockUpdate(parseInt(e.target.value))}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -128,7 +85,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
                       할인
                     </span>
                     <button
-                      onClick={() => handleRemoveDiscount(product.id, index)}
+                      onClick={() => handleRemoveDiscount(index)}
                       className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                     >
                       삭제
@@ -161,7 +118,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
                     className="w-1/3 p-2 border rounded"
                   />
                   <button
-                    onClick={() => handleAddDiscount(product.id)}
+                    onClick={handleAddDiscount}
                     className="w-1/3 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
                   >
                     할인 추가
@@ -187,7 +144,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
               ))}
               <button
                 data-testid="modify-button"
-                onClick={() => handleEditProduct(product)}
+                onClick={handleEditProduct}
                 className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mt-2"
               >
                 수정
