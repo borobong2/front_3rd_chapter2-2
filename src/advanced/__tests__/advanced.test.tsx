@@ -14,6 +14,8 @@ import { Coupon, Product } from "../../types";
 import { useCart } from "../../refactoring/hooks/useCart";
 import { useCoupons } from "../../refactoring/hooks/useCoupon";
 import { useProducts } from "../../refactoring/hooks/useProduct";
+import { useCouponManagement } from "../../refactoring/hooks/useCouponManagement";
+import { useProductAccordion } from "../../refactoring/hooks/useProductAccordion";
 
 const mockProducts: Product[] = [
   {
@@ -481,6 +483,35 @@ describe("advanced > ", () => {
       expect(result.current.products[0].name).toBe("업데이트된 상품");
       expect(result.current.products[0].price).toBe(15000);
       expect(result.current.products[0].stock).toBe(5);
+    });
+  });
+
+  describe("useProductAccordion hook", () => {
+    test("제품 아코디언을 열고 닫을 수 있다", () => {
+      const { result } = renderHook(() => useProductAccordion());
+
+      // 초기 상태 확인
+      expect(result.current.openProductIds.size).toBe(0);
+
+      // 제품 ID "p1"을 열기
+      act(() => {
+        result.current.toggleProductAccordion("p1");
+      });
+      expect(result.current.openProductIds.has("p1")).toBe(true);
+
+      // 제품 ID "p1"을 닫기
+      act(() => {
+        result.current.toggleProductAccordion("p1");
+      });
+      expect(result.current.openProductIds.has("p1")).toBe(false);
+
+      // 여러 제품 ID 열기
+      act(() => {
+        result.current.toggleProductAccordion("p1");
+        result.current.toggleProductAccordion("p2");
+      });
+      expect(result.current.openProductIds.has("p1")).toBe(true);
+      expect(result.current.openProductIds.has("p2")).toBe(true);
     });
   });
 });
