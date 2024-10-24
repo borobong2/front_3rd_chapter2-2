@@ -1,9 +1,9 @@
 import { Coupon, Product } from "../../../types.ts";
 import { useCart } from "../../hooks/index.ts";
-import { OrderSummary } from "../order/OrderSummary.tsx";
-import { CouponSelector } from "../coupon/CouponSelector.tsx";
+import { OrderSummary } from "./order/OrderSummary.tsx";
+import { CouponSelector } from "./coupon/CouponSelector.tsx";
 import { CartList } from "./CartList";
-import { ProductList } from "../product/ProductList.tsx";
+import { ProductList } from "./product/ProductList.tsx";
 import { CartItem } from "./CartItem.tsx";
 
 interface Props {
