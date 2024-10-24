@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Product } from "../../../../types.ts";
 import { ProductItem } from "./ProductItem.tsx";
+import { useProductAccordion } from "../../../hooks/useProductAccordion";
 
 interface ProductListProps {
   products: Product[];
@@ -11,19 +12,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   products,
   onProductUpdate,
 }) => {
-  const [openProductIds, setOpenProductIds] = useState(new Set<string>());
-
-  const toggleProductAccordion = (productId: string) => {
-    setOpenProductIds((prevIds) => {
-      const newIds = new Set(prevIds);
-      if (newIds.has(productId)) {
-        newIds.delete(productId);
-      } else {
-        newIds.add(productId);
-      }
-      return newIds;
-    });
-  };
+  const { openProductIds, toggleProductAccordion } = useProductAccordion();
 
   return (
     <div className="space-y-2">
