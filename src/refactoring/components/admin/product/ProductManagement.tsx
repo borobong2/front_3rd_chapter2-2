@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Product } from "../../../types";
+import { Product } from "../../../../types.ts";
 import { NewProductForm } from "./NewProductForm.tsx";
-import { AdminProductList } from "./AdminProductList.tsx";
+import { ProductList } from "./ProductList.tsx";
 
 interface ProductManagementProps {
   products: Product[];
@@ -26,7 +26,7 @@ export const ProductManagement: React.FC<ProductManagementProps> = ({
         {showNewProductForm ? "취소" : "새 상품 추가"}
       </button>
       {showNewProductForm && <NewProductForm onProductAdd={onProductAdd} />}
-      <AdminProductList products={products} onProductUpdate={onProductUpdate} />
+      <ProductList products={products} onProductUpdate={onProductUpdate} />
     </div>
   );
 };

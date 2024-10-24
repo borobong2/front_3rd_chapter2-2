@@ -1,6 +1,6 @@
 import React from "react";
-import { Product } from "../../../types";
-import { useProductEdit } from "../../hooks/useProductEdit";
+import { Product } from "../../../../types.ts";
+import { useProductEdit } from "../../../hooks/useProductEdit.ts";
 import { ProductHeader } from "./ProductHeader.tsx";
 import { ProductEditForm } from "./ProductEditForm.tsx";
 import { ProductCardList } from "./ProductCardList.tsx";

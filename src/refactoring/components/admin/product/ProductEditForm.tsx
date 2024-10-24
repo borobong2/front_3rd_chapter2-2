@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../../types";
+import { Product } from "../../../../types.ts";
 import { ProductDiscountList } from "./ProductDiscountList.tsx";
 
 interface ProductEditFormProps {

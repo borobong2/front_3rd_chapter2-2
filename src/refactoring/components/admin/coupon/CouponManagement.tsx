@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Coupon } from "../../../types";
+import { Coupon } from "../../../../types";
 
 interface CouponManagementProps {
   coupons: Coupon[];

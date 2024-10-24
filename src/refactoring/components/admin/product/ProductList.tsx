@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Product } from "../../../types";
+import { Product } from "../../../../types.ts";
 import { ProductItem } from "./ProductItem.tsx";
 
 interface ProductListProps {
@@ -7,7 +7,7 @@ interface ProductListProps {
   onProductUpdate: (product: Product) => void;
 }
 
-export const AdminProductList: React.FC<ProductListProps> = ({
+export const ProductList: React.FC<ProductListProps> = ({
   products,
   onProductUpdate,
 }) => {
