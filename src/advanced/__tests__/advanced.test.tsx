@@ -13,6 +13,7 @@ import { AdminPage } from "../../refactoring/pages/AdminPage";
 import { Coupon, Product } from "../../types";
 import { useCart } from "../../refactoring/hooks/useCart";
 import { useCoupons } from "../../refactoring/hooks/useCoupon";
+import { useProducts } from "../../refactoring/hooks/useProduct";
 
 const mockProducts: Product[] = [
   {
@@ -420,6 +421,66 @@ describe("advanced > ", () => {
       expect(result.current.coupons[1].name).toBe("새 쿠폰");
       expect(result.current.coupons[1].discountType).toBe("amount");
       expect(result.current.coupons[1].discountValue).toBe(5000);
+    });
+  });
+
+  describe("useProducts hook", () => {
+    test("초기 상품을 설정하고 새 상품을 추가할 수 있다", () => {
+      const initialProducts: Product[] = [
+        {
+          id: "initial",
+          name: "초기 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        },
+      ];
+
+      const { result } = renderHook(() => useProducts(initialProducts));
+
+      expect(result.current.products).toHaveLength(1);
+      expect(result.current.products[0].name).toBe("초기 상품");
+
+      act(() => {
+        result.current.addProduct({
+          id: "new",
+          name: "새 상품",
+          price: 20000,
+          stock: 5,
+          discounts: [],
+        });
+      });
+
+      expect(result.current.products).toHaveLength(2);
+      expect(result.current.products[1].name).toBe("새 상품");
+    });
+
+    test("상품을 업데이트할 수 있다", () => {
+      const initialProducts: Product[] = [
+        {
+          id: "test",
+          name: "테스트 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        },
+      ];
+
+      const { result } = renderHook(() => useProducts(initialProducts));
+
+      act(() => {
+        result.current.updateProduct({
+          id: "test",
+          name: "업데이트된 상품",
+          price: 15000,
+          stock: 5,
+          discounts: [],
+        });
+      });
+
+      expect(result.current.products[0].name).toBe("업데이트된 상품");
+      expect(result.current.products[0].price).toBe(15000);
+      expect(result.current.products[0].stock).toBe(5);
     });
   });
 });
