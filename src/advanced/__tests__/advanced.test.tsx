@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { describe, expect, test } from "vitest";
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  within,
+  renderHook,
+} from "@testing-library/react";
 import { CartPage } from "../../refactoring/pages/CartPage";
 import { AdminPage } from "../../refactoring/pages/AdminPage";
 import { Coupon, Product } from "../../types";
+import { useCart } from "../../refactoring/hooks/useCart";
 
 const mockProducts: Product[] = [
   {
@@ -261,13 +269,125 @@ describe("advanced > ", () => {
     });
   });
 
-  describe("자유롭게 작성해보세요.", () => {
-    test("새로운 유틸 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요", () => {
-      expect(true).toBe(false);
+  describe("useCart hook", () => {
+    test("상품을 장바구니에 추가하고 제거할 수 있다", () => {
+      const { result } = renderHook(() => useCart());
+
+      act(() => {
+        result.current.addToCart({
+          id: "test1",
+          name: "테스트 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        });
+      });
+
+      expect(result.current.cart.length).toBe(1);
+      expect(result.current.cart[0].product.name).toBe("테스트 상품");
+
+      act(() => {
+        result.current.removeFromCart("test1");
+      });
+
+      expect(result.current.cart.length).toBe(0);
     });
 
-    test("새로운 hook 함수르 만든 후에 테스트 코드를 작성해서 실행해보세요", () => {
-      expect(true).toBe(false);
+    test("장바구니 상품의 수량을 업데이트할 수 있다", () => {
+      const { result } = renderHook(() => useCart());
+
+      act(() => {
+        result.current.addToCart({
+          id: "test1",
+          name: "테스트 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        });
+      });
+
+      act(() => {
+        result.current.updateQuantity("test1", 5);
+      });
+
+      expect(result.current.cart[0].quantity).toBe(5);
+    });
+
+    test("쿠폰을 적용할 수 있다", () => {
+      const { result } = renderHook(() => useCart());
+
+      act(() => {
+        result.current.addToCart({
+          id: "test1",
+          name: "테스트 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        });
+      });
+
+      act(() => {
+        result.current.applyCoupon({
+          name: "10% 할인 쿠폰",
+          code: "TEST10",
+          discountType: "percentage",
+          discountValue: 10,
+        });
+      });
+
+      expect(result.current.selectedCoupon?.code).toBe("TEST10");
+    });
+
+    test("장바구니의 총 가격을 계산할 수 있다", () => {
+      const { result } = renderHook(() => useCart());
+
+      act(() => {
+        result.current.addToCart({
+          id: "test1",
+          name: "테스트 상품 1",
+          price: 10000,
+          stock: 10,
+          discounts: [],
+        });
+        result.current.addToCart({
+          id: "test2",
+          name: "테스트 상품 2",
+          price: 20000,
+          stock: 5,
+          discounts: [],
+        });
+      });
+
+      const { totalBeforeDiscount, totalAfterDiscount } =
+        result.current.calculateTotal();
+      expect(totalBeforeDiscount).toBe(30000);
+      expect(totalAfterDiscount).toBe(30000);
+    });
+
+    test("최대 할인을 적용할 수 있다", () => {
+      const { result } = renderHook(() => useCart());
+
+      act(() => {
+        result.current.addToCart({
+          id: "test1",
+          name: "테스트 상품",
+          price: 10000,
+          stock: 10,
+          discounts: [
+            { quantity: 1, rate: 0.1 },
+            { quantity: 5, rate: 0.2 },
+          ],
+        });
+      });
+
+      act(() => {
+        result.current.updateQuantity("test1", 5);
+      });
+
+      const appliedDiscount = result.current.getAppliedDiscount(
+        result.current.cart[0]
+      );
+      expect(appliedDiscount).toBe(0.2);
     });
   });
 });
