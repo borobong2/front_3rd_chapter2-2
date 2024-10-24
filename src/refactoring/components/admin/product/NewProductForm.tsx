@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Product } from "../../../../types";
+import { useProductManagement } from "../../../hooks/useProductManagement";
 
 interface NewProductFormProps {
   onProductAdd: (product: Product) => void;
@@ -8,18 +9,8 @@ interface NewProductFormProps {
 export const NewProductForm: React.FC<NewProductFormProps> = ({
   onProductAdd,
 }) => {
-  const [newProduct, setNewProduct] = useState<Product>({
-    id: "",
-    name: "",
-    price: 0,
-    stock: 0,
-    discounts: [],
-  });
-
-  const handleAddNewProduct = () => {
-    onProductAdd({ ...newProduct, id: Date.now().toString() });
-    setNewProduct({ id: "", name: "", price: 0, stock: 0, discounts: [] });
-  };
+  const { newProduct, setNewProduct, handleAddNewProduct } =
+    useProductManagement(onProductAdd);
 
   return (
     <div className="bg-white p-4 rounded shadow mb-4">
