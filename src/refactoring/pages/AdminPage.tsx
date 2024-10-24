@@ -1,7 +1,7 @@
 import React from "react";
-import { Product, Coupon } from "../../../types";
-import { ProductManagement } from "./product/ProductManagement";
-import { CouponManagement } from "./coupon/CouponManagement";
+import { Product, Coupon } from "../../types";
+import { ProductManagement } from "../components/admin/product/ProductManagement";
+import { CouponManagement } from "../components/admin/coupon/CouponManagement";
 
 interface Props {
   products: Product[];
