@@ -11,10 +11,10 @@ import {
 import { CartPage } from "../../refactoring/pages/CartPage";
 import { AdminPage } from "../../refactoring/pages/AdminPage";
 import { Coupon, Product } from "../../types";
-import { useCart } from "../../refactoring/hooks/useCart";
-import { useCoupons } from "../../refactoring/hooks/useCoupon";
-import { useProducts } from "../../refactoring/hooks/useProduct";
-import { useProductAccordion } from "../../refactoring/hooks/useProductAccordion";
+import { useCart } from "../../refactoring/hooks/cart/useCart";
+import { useCoupons } from "../../refactoring/hooks/coupon/useCoupon";
+import { useProducts } from "../../refactoring/hooks/product/useProduct";
+import { useProductAccordion } from "../../refactoring/hooks/product/useProductAccordion";
 
 const mockProducts: Product[] = [
   {

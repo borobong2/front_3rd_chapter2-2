@@ -1,7 +1,7 @@
 import React from "react";
 import { Product } from "../../../../types.ts";
 import { ProductItem } from "./ProductItem.tsx";
-import { useProductAccordion } from "../../../hooks/useProductAccordion";
+import { useProductAccordion } from "../../../hooks/product/useProductAccordion.ts";
 
 interface ProductListProps {
   products: Product[];

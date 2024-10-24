@@ -1,6 +1,6 @@
 import React from "react";
 import { Coupon } from "../../../../types";
-import { useCouponManagement } from "../../../hooks/useCouponManagement";
+import { useCouponManagement } from "../../../hooks/coupon/useCouponManagement";
 
 interface CouponManagementProps {
   coupons: Coupon[];

@@ -1,6 +1,6 @@
 import React from "react";
 import { Product } from "../../../../types";
-import { useProductManagement } from "../../../hooks/useProductManagement";
+import { useProductManagement } from "../../../hooks/product/useProductManagement";
 
 interface NewProductFormProps {
   onProductAdd: (product: Product) => void;
