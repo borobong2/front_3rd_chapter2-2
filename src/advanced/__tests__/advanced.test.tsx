@@ -14,7 +14,6 @@ import { Coupon, Product } from "../../types";
 import { useCart } from "../../refactoring/hooks/useCart";
 import { useCoupons } from "../../refactoring/hooks/useCoupon";
 import { useProducts } from "../../refactoring/hooks/useProduct";
-import { useCouponManagement } from "../../refactoring/hooks/useCouponManagement";
 import { useProductAccordion } from "../../refactoring/hooks/useProductAccordion";
 
 const mockProducts: Product[] = [
