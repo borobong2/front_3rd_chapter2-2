@@ -1,9 +1,10 @@
-import { CartItem, Coupon, Product } from "../../../types.ts";
+import { CartItem as CartItemType, Coupon, Product } from "../../../types.ts";
 import { useCart } from "../../hooks/index.ts";
 import { OrderSummary } from "../order/OrderSummary.tsx";
 import { CouponSelector } from "../coupon/CouponSelector.tsx";
 import { CartList } from "./CartList";
 import { ProductList } from "../product/ProductList.tsx";
+import { CartItem } from "./CartItem.tsx";
 
 interface Props {
   products: Product[];
@@ -33,7 +34,7 @@ export const CartPage = ({ products, coupons }: Props) => {
   const { totalBeforeDiscount, totalAfterDiscount, totalDiscount } =
     calculateTotal();
 
-  const getAppliedDiscount = (item: CartItem) => {
+  const getAppliedDiscount = (item: CartItemType) => {
     const { discounts } = item.product;
     const { quantity } = item;
     let appliedDiscount = 0;
@@ -56,12 +57,17 @@ export const CartPage = ({ products, coupons }: Props) => {
           getMaxDiscount={getMaxDiscount}
         />
         <div>
-          <CartList
-            cart={cart}
-            updateQuantity={updateQuantity}
-            removeFromCart={removeFromCart}
-            getAppliedDiscount={getAppliedDiscount}
-          />
+          <CartList>
+            {cart.map((item) => (
+              <CartItem
+                key={item.product.id}
+                item={item}
+                appliedDiscount={getAppliedDiscount(item)}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+              />
+            ))}
+          </CartList>
           <CouponSelector
             coupons={coupons}
             applyCoupon={applyCoupon}
